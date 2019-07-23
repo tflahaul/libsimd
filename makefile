@@ -6,7 +6,7 @@
 #    By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/11 10:35:03 by thflahau          #+#    #+#              #
-#    Updated: 2019/07/23 13:36:55 by thflahau         ###   ########.fr        #
+#    Updated: 2019/07/23 14:21:52 by thflahau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,29 +17,26 @@ NAME		=	libsimd.a
 CFLAGS		=	-Wall				\
 				-Wextra				\
 				-Werror				\
+				-pedantic			\
 				-msse4				\
 				-O3					\
 				-c
 
 include		libsources.mk
 
-OBJDIR	=	objs
-
 OBJS	=	$(LIBSOURCES:.c=.o)
-
-OBJPATH	=	$(addprefix $(OBJDIR)/, $(LIBSOURCES:.c=.o))
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@ar -cq $@ $(OBJPATH)
+	@ar -cq $@ $(OBJS)
 	@ranlib $@
 
 %.o: %.c	libsimd.h
-	$(CC) $(CFLAGS) $< -o $(OBJDIR)/$@
+	$(CC) $(CFLAGS) $<
 
 clean:
-	@/bin/rm -rf $(OBJDIR)
+	@/bin/rm -rf $(OBJS)
 
 fclean: clean
 	@/bin/rm -rf $(NAME)
