@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 
-uint16_t					ft_swap_uint16(uint16_t nb)
+uint16_t			ft_swap_uint16(uint16_t nb)
 {
 	return (((nb & 0x00ff) >> 8) | ((nb & 0xff00) << 8));
 }

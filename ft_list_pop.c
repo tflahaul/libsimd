@@ -17,7 +17,7 @@ void				ft_list_pop(t_listhead *node, void *(ptr)(t_listhead *))
 {
 	node->next->prev = node->prev;
 	node->prev->next = node->next;
-	node->next = __DARWIN_NULL;
-	node->prev = __DARWIN_NULL;
+	node->next = (void *)0;
+	node->prev = (void *)0;
 	free((*ptr)(node));
 }

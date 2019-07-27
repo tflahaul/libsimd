@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 
-uint32_t					ft_swap_uint32(uint32_t nb)
+uint32_t			ft_swap_uint32(uint32_t nb)
 {
 	return (((nb & 0xff000000) >> 24) | ((nb & 0x00ff0000) >> 8) |
 			((nb & 0x0000ff00) << 8) | ((nb & 0x000000ff) << 24));

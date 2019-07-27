@@ -12,11 +12,11 @@
 
 #include <smmintrin.h>
 
-void					*ft_memset(void *dst, int c, size_t size)
+void				*ft_memset(void *dst, int c, size_t size)
 {
-	unsigned char		*ptr;
-	__m128i				*longword;
-	__m128i const		set = _mm_set1_epi8(c);
+	unsigned char	*ptr;
+	__m128i			*longword;
+	__m128i const	set = _mm_set1_epi8(c);
 
 	longword = (__m128i *)dst;
 	while (size >= sizeof(__m128i))

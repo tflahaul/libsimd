@@ -12,7 +12,7 @@
 
 #include "libsimd.h"
 
-inline void	ft_list_add(t_listhead *node, t_listhead *prev, t_listhead *next)
+__inline void		ft_list_add(t_listhead *node, t_listhead *prev, t_listhead *next)
 {
 	next->prev = node;
 	node->next = next;

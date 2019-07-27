@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include "libsimd.h"
 
-void						ft_putstr(char const *str)
+void				ft_putstr(char const *str)
 {
 	write(1, str, ft_strlen(str));
 }

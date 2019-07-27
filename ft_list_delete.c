@@ -13,10 +13,10 @@
 #include <stdlib.h>
 #include "libsimd.h"
 
-void			ft_list_delete(t_listhead *head, void *(*funptr)(t_listhead *))
+void				ft_list_delete(t_listhead *head, void *(*funptr)(t_listhead *))
 {
-	t_listhead	*node;
-	t_listhead	*next;
+	t_listhead		*node;
+	t_listhead		*next;
 
 	node = head->next;
 	next = node->next;

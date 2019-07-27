@@ -13,10 +13,10 @@
 #include <unistd.h>
 #include "libsimd.h"
 
-size_t					ft_list_size(t_listhead const *head)
+size_t				ft_list_size(t_listhead const *head)
 {
-	size_t				size;
-	t_listhead			*position;
+	size_t			size;
+	t_listhead		*position;
 
 	size = 0;
 	position = (t_listhead *)head;

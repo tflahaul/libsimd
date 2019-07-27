@@ -25,10 +25,15 @@ size_t				ft_strlen(char const *str)
 	if (__unlikely(!str[0]))
 		return (0);
 	ptr = (char *)str;
-	longword = (__m128i *)ptr;
+	if (__unlikely(!__isaligned(str, 16))) {
+		while (!__isaligned(str, 16))
+			if (*str++ == 0)
+				return ((char *)str - ptr);
+	}
+	longword = (__m128i *)__builtin_assume_aligned(ptr, 16);
 	while (longword)
 	{
-		chunk = _mm_loadu_si128(longword);
+		chunk = _mm_load_si128(longword);
 		if (_mm_cmpistrc(set, chunk, FLAG))
 		{
 			ptr = (char *)longword + _mm_cmpistri(set, chunk, FLAG);

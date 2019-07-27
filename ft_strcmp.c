@@ -12,7 +12,7 @@
 
 #include "libsimd.h"
 
-int						ft_strcmp(char const *s1, char const *s2)
+int					ft_strcmp(char const *s1, char const *s2)
 {
 	if (__unlikely(s1 == s2))
 		return (0);
