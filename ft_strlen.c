@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/12 12:38:17 by thflahau          #+#    #+#             */
-/*   Updated: 2019/07/23 13:17:36 by thflahau         ###   ########.fr       */
+/*   Updated: 2019/07/28 12:00:06 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ size_t				ft_strlen(char const *str)
 	if (__unlikely(!__isaligned(str, 16))) {
 		while (!__isaligned(str, 16))
 			if (*str++ == 0)
-				return ((char *)str - ptr);
+				return ((char *)(str - 1) - ptr);
 	}
 	longword = (__m128i *)__builtin_assume_aligned(ptr, 16);
 	while (longword)
