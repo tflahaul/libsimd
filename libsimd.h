@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/27 12:34:53 by thflahau          #+#    #+#             */
-/*   Updated: 2019/08/16 15:43:54 by thflahau         ###   ########.fr       */
+/*   Updated: 2019/08/17 21:49:54 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,13 @@
 
 # define __isaligned(ptr, x)		(!((size_t)ptr & (x - 1)))
 
-# define FLAG_SB	(_SIDD_SBYTE_OPS | _SIDD_CMP_EQUAL_EACH | _SIDD_LEAST_SIGNIFICANT)
-# define FLAG_SBM	(_SIDD_SBYTE_OPS | _SIDD_MOST_SIGNIFICANT)
+# define FLAG_SBL	(_SIDD_SBYTE_OPS | _SIDD_CMP_EQUAL_EACH | _SIDD_LEAST_SIGNIFICANT)
+# define FLAG_SBM	(_SIDD_SBYTE_OPS | _SIDD_CMP_EQUAL_ANY | _SIDD_MOST_SIGNIFICANT)
 # define M128_SZ	16
 
 /*
-**			Strings
+**	Strings
 */
-
 size_t					ft_strlen(char const *str)
 {
 	char				*ptr = (char *)str;
@@ -56,9 +55,9 @@ size_t					ft_strlen(char const *str)
 	while (longword)
 	{
 		chunk = _mm_loadu_si128(longword);
-		if (_mm_cmpistrc(set, chunk, FLAG_SB))
+		if (_mm_cmpistrc(set, chunk, FLAG_SBL))
 		{
-			ptr = (char *)longword + _mm_cmpistri(set, chunk, FLAG_SB);
+			ptr = (char *)longword + _mm_cmpistri(set, chunk, FLAG_SBL);
 			return ((size_t)(ptr - (char *)str));
 		}
 		++longword;
@@ -66,14 +65,33 @@ size_t					ft_strlen(char const *str)
 	return (0);
 }
 
+char					*ft_strchr(char const *str, int c)
+{
+	__m128i				chunk;
+	__m128i				*longword = (__m128i *)__builtin_assume_aligned(str, M128_SZ);
+	__m128i const		set = _mm_setr_epi8(c, 0, 0, 0, 0, 0, 0, 0,
+											0, 0, 0, 0, 0, 0, 0, 0);
+
+	while (longword)
+	{
+		chunk = _mm_loadu_si128(longword);
+		if (_mm_cmpistrc(set, chunk, FLAG_SBM))
+			return ((char *)longword + _mm_cmpistri(set, chunk, FLAG_SBM));
+		else if (_mm_cmpistrz(set, chunk, FLAG_SBM))
+			break ;
+		++longword;
+	}
+	return (NULL);
+}
+
 char					*ft_strrchr(char const *str, int c)
 {
 	char				*ptr = NULL;
 	__m128i				chunk;
-	__m128i				*longword;
-	__m128i const		set = _mm_setr_epi16(c, 0, 0, 0, 0, 0, 0, 0);
+	__m128i				*longword = (__m128i *)__builtin_assume_aligned(str, M128_SZ);
+	__m128i const		set = _mm_setr_epi8(c, 0, 0, 0, 0, 0, 0, 0,
+											0, 0, 0, 0, 0, 0, 0, 0);
 
-	longword = (__m128i *)__builtin_assume_aligned(str, M128_SZ);
 	while (longword)
 	{
 		chunk = _mm_loadu_si128(longword);
@@ -87,13 +105,12 @@ char					*ft_strrchr(char const *str, int c)
 }
 
 /*
-**			Memory
+**	Memory
 */
-
 void					ft_bzero(void *ptr, size_t size)
 {
 	unsigned char		*mem;
-	__m128i				*longword = (__m128i *)ptr;
+	__m128i				*longword = (__m128i *)__builtin_assume_aligned(ptr, M128_SZ);
 	__m128i const		set = _mm_setzero_si128();
 
 	while (size >= M128_SZ)
@@ -110,8 +127,8 @@ void					ft_memcpy(void *dst, void *src, size_t len)
 {
 	unsigned char		*ptd;
 	unsigned char		*pts;
-	__m128i				*dstlongword = (__m128i *)dst;
-	__m128i				*srclongword = (__m128i *)src;
+	__m128i				*dstlongword = (__m128i *)__builtin_assume_aligned(dst, M128_SZ);
+	__m128i				*srclongword = (__m128i *)__builtin_assume_aligned(src, M128_SZ);
 
 	while (len >= M128_SZ)
 	{
@@ -127,7 +144,7 @@ void					ft_memcpy(void *dst, void *src, size_t len)
 void					*ft_memset(void *dst, int c, size_t size)
 {
 	unsigned char		*ptr;
-	__m128i				*longword = (__m128i *)dst;
+	__m128i				*longword = (__m128i *)__builtin_assume_aligned(dst, M128_SZ);
 	__m128i const		set = _mm_set1_epi8(c);
 
 	while (size >= M128_SZ)
@@ -142,9 +159,8 @@ void					*ft_memset(void *dst, int c, size_t size)
 }
 
 /*
-**			Bits
+**	Bits
 */
-
 inline uint16_t			ft_swap_uint16(uint16_t nb)
 {
 	return (((nb & 0x00ff) >> 8) | ((nb & 0xff00) << 8));
