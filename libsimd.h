@@ -13,6 +13,9 @@
 #ifndef __LIBSIMD_H__
 # define __LIBSIMD_H__
 
+# ifndef __SSE4_1__
+#  error "Please add -msse4 to your compilation flags"
+# endif
 # include <smmintrin.h>
 # include <sys/types.h>
 # include <stdint.h>
@@ -163,7 +166,7 @@ void					*ft_memset(void *dst, int c, size_t size)
 */
 inline uint16_t			ft_swap_uint16(uint16_t nb)
 {
-	return (((nb & 0x00ff) >> 8) | ((nb & 0xff00) << 8));
+	return (((nb & 0x00ff) >> 8) | (uint16_t)((nb & 0xff00) << 8));
 }
 
 inline uint32_t			ft_swap_uint32(uint32_t nb)
