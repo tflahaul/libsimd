@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/27 12:34:53 by thflahau          #+#    #+#             */
-/*   Updated: 2019/08/17 21:49:54 by thflahau         ###   ########.fr       */
+/*   Updated: 2019/08/29 11:48:10 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@
 #  error "Your compiler does not use the C preprocessor, try using GCC"
 # endif /* __GNUC__ */
 
-# define __pure						__attribute__((pure))
-# define __isaligned(ptr, x)		(!((size_t)ptr & (x - 1)))
+# ifndef __pure
+#  define __pure						__attribute__((pure))
+# endif /* __pure */
 
 # define FLAG_SBL	(_SIDD_SBYTE_OPS | _SIDD_CMP_EQUAL_EACH | _SIDD_LEAST_SIGNIFICANT)
 # define FLAG_SBM	(_SIDD_SBYTE_OPS | _SIDD_CMP_EQUAL_ANY | _SIDD_MOST_SIGNIFICANT)
@@ -163,15 +164,14 @@ void					*ft_memset(void *__restrict dst, int c, size_t size)
 }
 
 /* Compare the first @size bytes of @a and @b. Returns a boolean. */
-/*
-int						ft_memcmp(void *__restrict a, void *__restrict b, size_t size)
+__pure int				ft_memcmp(void *__restrict a, void *__restrict b, size_t size)
 {
 	uint8_t				*a8, *b8;
 	__m128i				*a128 = (__m128i *)__builtin_assume_aligned(a, M128_SZ);
 	__m128i				*b128 = (__m128i *)__builtin_assume_aligned(b, M128_SZ);
 
 	for (; size >= M128_SZ; size -= M128_SZ)
-		if (0x2a)
+		if (_mm_comineq_ss(_mm_loadu_si128(a128++), _mm_loadu_si128(b128++)))
 			return (1);
 	a8 = (uint8_t *)a128;
 	b8 = (uint8_t *)b128;
@@ -180,7 +180,7 @@ int						ft_memcmp(void *__restrict a, void *__restrict b, size_t size)
 			return (1);
 	return (0);
 }
-*/
+
 /*
 **	Bits
 */
