@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/27 12:34:53 by thflahau          #+#    #+#             */
-/*   Updated: 2019/08/29 11:48:10 by thflahau         ###   ########.fr       */
+/*   Updated: 2019/09/26 15:22:24 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,13 +205,13 @@ void				ft_string_memalloc(struct s_obj_string *obj, size_t size)
 	}
 }
 
-inline void			ft_free_ostr(struct s_obj_string *obj)
+void				ft_free_ostr(struct s_obj_string *obj)
 {
 	free((void *)obj->str);
 	obj->capacity = 0;
 }
 
-inline void			ft_safe_ostrcat(struct s_obj_string *obj, char *src)
+void				ft_safe_ostrcat(struct s_obj_string *obj, char *src)
 {
 	while (*src != 0 && __likely(obj->capacity > 0)) {
 		obj->str[obj->length++] = *src++;
@@ -230,7 +230,7 @@ void				ft_safe_long_ostrcat(struct s_obj_string *obj, char *__restrict src)
 	}
 }
 
-inline void			ft_ostrclr(struct s_obj_string *obj)
+void				ft_ostrclr(struct s_obj_string *obj)
 {
 	ft_bzero(obj->str, obj->length);
 	obj->capacity += obj->length;
